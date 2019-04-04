@@ -1,0 +1,10 @@
+LOAD CSV WITH HEADERS FROM "file:///nodos.csv" AS nodes
+CREATE (p:Nodo { id: nodes.nodo_id });
+
+create index on :Nodo(id)
+
+USING PERIODIC COMMIT 1000
+LOAD CSV WITH HEADERS FROM "file:///import_p3.csv" AS relacion
+MATCH (a:Nodo { id: relacion.From})
+MATCH (b:Nodo { id: relacion.To })
+CREATE (a)-[:Relacion]->(b);
